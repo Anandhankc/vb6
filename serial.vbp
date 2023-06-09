@@ -1,0 +1,80 @@
+VERSION 5.00
+Object = "{648A5603-2C6E-101B-82B6-000000000014}#1.1#0"; "MSCOMM32.OCX"
+Begin VB.Form Form1 
+   Caption         =   "Form1"
+   ClientHeight    =   3210
+   ClientLeft      =   120
+   ClientTop       =   465
+   ClientWidth     =   8295
+   LinkTopic       =   "Form1"
+   ScaleHeight     =   3210
+   ScaleWidth      =   8295
+   StartUpPosition =   3  'Windows Default
+   Begin VB.Timer Timer1 
+      Left            =   3480
+      Top             =   2280
+   End
+   Begin MSCommLib.MSComm MSComm1 
+      Left            =   4320
+      Top             =   2280
+      _ExtentX        =   1005
+      _ExtentY        =   1005
+      _Version        =   393216
+      CommPort        =   4
+      DTREnable       =   -1  'True
+      Handshaking     =   2
+   End
+   Begin VB.TextBox Text1 
+      Height          =   1095
+      Left            =   5160
+      TabIndex        =   1
+      Top             =   720
+      Width           =   2655
+   End
+   Begin VB.TextBox txtrec 
+      Height          =   1095
+      Left            =   720
+      TabIndex        =   0
+      Top             =   720
+      Width           =   2655
+   End
+   Begin VB.Label Label1 
+      Caption         =   "serial communication"
+      Height          =   375
+      Left            =   480
+      TabIndex        =   2
+      Top             =   2160
+      Width           =   2175
+   End
+End
+Attribute VB_Name = "Form1"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+
+Private Sub Form_Load()
+With MSComm1
+    .CommPort = 4
+    .Settings = "9600,n,8,1"
+    .Handshaking = comRTS
+    .RTSEnable = True
+    .DTREnable = True
+    .RThreshold = 1
+    .SThreshold = 1
+    .InputMode = comInputModeText
+    .InputLen = 0
+    .PortOpen = True 'must be the last
+  End With
+End Sub
+
+Private Sub Text2_Change()
+
+End Sub
+
+Private Sub Timer1_Timer()
+txtrec.Text = ""
+txtrec.Text = MSComm1.Input
+Text1.Text = Text1.Text + txtrec.Text
+
+End Sub
